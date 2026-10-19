@@ -7,7 +7,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 public class Pivot {
-    TalonFX armMotor = new TalonFX(PivotConstants.kPivotMotorID);
+    TalonFX pivotMotor = new TalonFX(PivotConstants.kPivotMotorID);
 
     final CurrentLimitsConfigs currentLimits = 
         new CurrentLimitsConfigs()
@@ -16,9 +16,22 @@ public class Pivot {
             .withStatorCurrentLimit(PivotConstants.kStatorCurrentLimit)
             .withStatorCurrentLimitEnable(PivotConstants.kStatorCurrentEnabled);
 
-    final TalonFXConfiguration motorConfiguration = new TalonFXConfiguration().withCurrentLimits(currentLimits);
+    final TalonFXConfiguration motorConfigurations = new TalonFXConfiguration().withCurrentLimits(currentLimits);
 
     final MotorOutputConfigs motorOutputConfig =
         new MotorOutputConfigs()
-            .withNeutralMode(PivotConstants.kNeutralModeValue);
+            .withNeutralMode(PivotConstants.kNeutralModeValue)
+            .withInverted(PivotConstants.kInversion);
+
+    final FeedbackConfigs feedBackConfig =
+        new FeedbackConfigs()
+            .withSensorToMechanismRatio(PivotConstants.kPivotGearRatio);
+
+    public Pivot(){
+        configureMotor();
+    }
+
+    private void configureMotor(){
+        pivotMotor.getConfigurator().apply(motorConfigurations);
+    }
 }
