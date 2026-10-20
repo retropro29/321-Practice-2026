@@ -17,16 +17,20 @@ public class Hood{
                 .withStatorCurrentLimit(HoodConstants.kStatorCurrentLimit)
                 .withStatorCurrentLimitEnable(HoodConstants.kStatorCurrentEnabled);
         
-    
-        final TalonFXConfiguration motorConfigurations= new TalonFXConfiguration().withCurrentLimits(currentLimits);
-
         final MotorOutputConfigs motorOutputConfig = 
             new MotorOutputConfigs()
                 .withNeutralMode(HoodConstants.kNeutralModeValue)
                 .withInverted(HoodConstants.kInversion);  
         
-        final FeedbackConfigs feedBackConfig =
+        final FeedbackConfigs feedback =
             new FeedbackConfigs().withSensorToMechanismRatio(HoodConstants.kHoodGearRatio);
+
+        final TalonFXConfiguration motorConfigurations = 
+            new TalonFXConfiguration()
+                .withCurrentLimits(currentLimits)
+                .withMotorOutput(motorOutputConfig)
+                .withFeedback(feedback);
+
 
     public Hood(){
         configureMotor();

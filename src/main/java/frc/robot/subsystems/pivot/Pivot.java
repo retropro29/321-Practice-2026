@@ -16,16 +16,20 @@ public class Pivot {
             .withStatorCurrentLimit(PivotConstants.kStatorCurrentLimit)
             .withStatorCurrentLimitEnable(PivotConstants.kStatorCurrentEnabled);
 
-    final TalonFXConfiguration motorConfigurations = new TalonFXConfiguration().withCurrentLimits(currentLimits);
-
     final MotorOutputConfigs motorOutputConfig =
         new MotorOutputConfigs()
             .withNeutralMode(PivotConstants.kNeutralModeValue)
             .withInverted(PivotConstants.kInversion);
 
-    final FeedbackConfigs feedBackConfig =
+    final FeedbackConfigs feedback =
         new FeedbackConfigs()
             .withSensorToMechanismRatio(PivotConstants.kPivotGearRatio);
+
+    final TalonFXConfiguration motorConfigurations = 
+        new TalonFXConfiguration()
+            .withCurrentLimits(currentLimits)
+            .withMotorOutput(motorOutputConfig)
+            .withFeedback(feedback);
 
     public Pivot(){
         configureMotor();
