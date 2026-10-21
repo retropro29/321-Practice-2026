@@ -6,6 +6,9 @@ import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import edu.wpi.first.epilogue.Logged;
+
+@Logged
 public class Hood{
 
         TalonFX hoodMotor = new TalonFX(HoodConstants.kHoodMotorID);
