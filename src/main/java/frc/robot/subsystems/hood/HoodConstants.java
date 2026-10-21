@@ -1,10 +1,12 @@
 package frc.robot.subsystems.hood;
 
 import static edu.wpi.first.units.Units.Amps;
+import static edu.wpi.first.units.Units.Degrees;
 
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Current;
 
 public class HoodConstants {
@@ -23,6 +25,8 @@ public class HoodConstants {
 
     public static final InvertedValue kInversion = InvertedValue.Clockwise_Positive;
     public static final NeutralModeValue kNeutralModeValue = NeutralModeValue.Brake;
+
+    public static final Angle kTargetAngleTolerance = Degrees.of(1.5);
 
 
     // public static final Angle kFeedAngle = Degrees.of(15);                      //Converts value into degrees
