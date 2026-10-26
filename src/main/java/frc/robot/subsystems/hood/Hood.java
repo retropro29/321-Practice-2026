@@ -1,6 +1,9 @@
 package frc.robot.subsystems.hood;
 
 import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.DegreesPerSecond;
+import static edu.wpi.first.units.Units.DegreesPerSecondPerSecond;
+import static edu.wpi.first.units.Units.Volts;
 
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
@@ -9,7 +12,12 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.epilogue.Logged;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.Current;
+import edu.wpi.first.units.measure.Voltage;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 @Logged
 public class Hood{
@@ -46,6 +54,44 @@ public class Hood{
         hoodMotor.getConfigurator().apply(motorConfigurations);
     }
 
+    private double kP = 0;
+    private double kI = 0;
+    private double kD = 0;
+
+    Constraints hoodConstraints = 
+    new Constraints(
+        HoodConstants.kMaxVelocity.in(DegreesPerSecond), 
+        HoodConstants.kMaxAcceleration.in(DegreesPerSecondPerSecond));
+
+    ProfiledPIDController hoodController = 
+        new ProfiledPIDController(
+            kP,
+            kI, 
+            kD, 
+            hoodConstraints);
+
+    public void goToAngle(Angle currentAngle, Angle targetAngle){
+
+        Voltage desiredVoltage = Volts.of(
+            hoodController.calculate(
+                currentAngle.in(Degrees),
+                targetAngle.in(Degrees)));
+
+        hoodMotor.setVoltage(desiredVoltage.in(Volts));
+    }
+
+    @Logged(name = "hoodVoltage")
+    public Voltage getVoltage(){
+        Voltage voltage = hoodMotor.getMotorVoltage().getValue();
+        return voltage;
+    }
+
+    @Logged(name = "hoodCurrent")
+    public Current getCurrent(){
+        Current current = hoodMotor.getStatorCurrent().getValue();
+        return current;
+    }
+
     @Logged(name = "hoodPitch")
     public Angle getAngle(){
         Angle angle = hoodMotor.getPosition().getValue();
@@ -56,6 +102,12 @@ public class Hood{
     public boolean atTargetAngle(Angle targetAngle){
         boolean result =  Math.abs(getAngle().in(Degrees) - targetAngle.in(Degrees)) <= HoodConstants.kTargetAngleTolerance.in(Degrees);
         return result;
+    }
+
+
+    //@Override
+    public void periodic(){
+        SmartDashboard.putNumber("Hood Angle", hoodMotor.getPosition().getValue().in(Degrees));
     }
 
 }
