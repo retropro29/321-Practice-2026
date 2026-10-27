@@ -12,6 +12,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.epilogue.Logged;
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.units.measure.Angle;
@@ -58,10 +59,20 @@ public class Hood{
     private double kI = 0;
     private double kD = 0;
 
+    private double kS = 0;
+    private double kG = 0;
+    private double kV = 0;
+
     Constraints hoodConstraints = 
-    new Constraints(
-        HoodConstants.kMaxVelocity.in(DegreesPerSecond), 
-        HoodConstants.kMaxAcceleration.in(DegreesPerSecondPerSecond));
+        new Constraints(
+            HoodConstants.kMaxVelocity.in(DegreesPerSecond), 
+            HoodConstants.kMaxAcceleration.in(DegreesPerSecondPerSecond));
+
+    ArmFeedforward hoodFeedForward = 
+        new ArmFeedforward(
+            kS,
+            kG,
+            kV);
 
     ProfiledPIDController hoodController = 
         new ProfiledPIDController(
@@ -70,7 +81,8 @@ public class Hood{
             kD, 
             hoodConstraints);
 
-    public void goToAngle(Angle currentAngle, Angle targetAngle){
+    public void goToAngle(Angle targetAngle){
+        Angle currentAngle = getAngle();
 
         Voltage desiredVoltage = Volts.of(
             hoodController.calculate(
@@ -98,7 +110,7 @@ public class Hood{
         return angle;
     }
 
-    @Logged(name = "atTargetAngle")
+    @Logged(name = "atTargetAngleHood")
     public boolean atTargetAngle(Angle targetAngle){
         boolean result =  Math.abs(getAngle().in(Degrees) - targetAngle.in(Degrees)) <= HoodConstants.kTargetAngleTolerance.in(Degrees);
         return result;
