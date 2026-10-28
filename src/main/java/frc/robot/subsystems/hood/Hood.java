@@ -63,7 +63,7 @@ public class Hood{
     private double kG = 0;
     private double kV = 0;
 
-    Constraints hoodConstraints = 
+    private Constraints hoodConstraints = 
         new Constraints(
             HoodConstants.kMaxVelocity.in(DegreesPerSecond), 
             HoodConstants.kMaxAcceleration.in(DegreesPerSecondPerSecond));
