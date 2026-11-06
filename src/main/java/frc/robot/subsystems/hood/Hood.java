@@ -19,9 +19,10 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 @Logged
-public class Hood{
+public class Hood extends SubsystemBase{
 
         TalonFX hoodMotor = new TalonFX(HoodConstants.kHoodMotorID);
 
@@ -130,4 +131,12 @@ public class Hood{
         SmartDashboard.putNumber("Hood Angle", hoodMotor.getPosition().getValue().in(Degrees));
     }
 
+
+    public void runVolts(Voltage desiredVoltage){
+        hoodMotor.setVoltage(desiredVoltage.in(Volts));
+    }
+
+    public boolean atHomedPosition(){
+        return false;
+    }
 }

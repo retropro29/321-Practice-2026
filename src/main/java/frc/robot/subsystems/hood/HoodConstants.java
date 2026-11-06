@@ -4,6 +4,7 @@ import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.DegreesPerSecond;
 import static edu.wpi.first.units.Units.DegreesPerSecondPerSecond;
+import static edu.wpi.first.units.Units.Volts;
 
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -12,6 +13,7 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularAcceleration;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
+import edu.wpi.first.units.measure.Voltage;
 
 public class HoodConstants {
 
@@ -35,6 +37,8 @@ public class HoodConstants {
 
     public static final AngularVelocity kMaxVelocity = DegreesPerSecond.of(0);
     public static final AngularAcceleration kMaxAcceleration = DegreesPerSecondPerSecond.of(0);
+
+    public static final Voltage kHomingVoltage = Volts.of(0);
 
     // public static final Angle kFeedAngle = Degrees.of(15);                      //Converts value into degrees
     // public static final double kFeedAngleDouble = kFeedAngle.in(Radians);       //Converts degrees into double
